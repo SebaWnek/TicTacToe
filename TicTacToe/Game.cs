@@ -17,6 +17,7 @@ namespace TicTacToe
         public static Player player1;
         public static Player player2;
         public static int[,] gameMap;
+        private static bool seamlessPlay;
         public static int GameCounter { get; set; } = 0;
 
         public static Player CreatePlayer(PlayerType type, string name, int number)
@@ -40,7 +41,7 @@ namespace TicTacToe
         {
             PlayerType playerType1;
             PlayerType playerType2;
-            bool player1Correct, player2Correct;
+            bool player1Correct, player2Correct, seamlessCorrect;
             Console.WriteLine("Player 1 - human/easy/medium/hard?");
 
             do
@@ -62,6 +63,29 @@ namespace TicTacToe
                 }
             }
             while (!player2Correct);
+
+            Console.WriteLine("Do you want to continiue playing, or decide after every game? y/n");
+
+            do
+            {
+                string answer = Console.ReadLine();
+                if (answer == "y")
+                {
+                    seamlessPlay = true;
+                    seamlessCorrect = true;
+                }
+                else if(answer == "n")
+                {
+                    seamlessPlay = false;
+                    seamlessCorrect = true;
+                }
+                else
+                {
+                    seamlessCorrect = false;
+                    Console.WriteLine("Wrong answer, please try again y or n");
+                }
+            }
+            while (!seamlessCorrect);
 
             player1 = CreatePlayer(playerType1, "X", 1);
             player2 = CreatePlayer(playerType2, "O", 10);
@@ -130,10 +154,16 @@ namespace TicTacToe
             }
             GameCounter++;
             Console.WriteLine($"Number of games played: {GameCounter}\nCurrent score: {player1.Name}: {player1.Score}, {player2.Name}: {player2.Score}");
-            //temporary disabled for testing purposes
-            //NewGame();
-            Thread.Sleep(1000);
-            PlayGame();
+
+            if (!seamlessPlay)
+            {
+                NewGame(); 
+            }
+            else
+            {
+                Thread.Sleep(1000);
+                PlayGame(); 
+            }
         }
 
         private static void EndGame()
