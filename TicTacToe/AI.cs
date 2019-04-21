@@ -9,17 +9,40 @@ namespace TicTacToe
         protected static Random rnd = new Random();
         protected List<byte[]> emptyCells = new List<byte[]>();
         protected List<byte[]> emptyCorners = new List<byte[]>();
+        protected List<byte[]> emptyWalls = new List<byte[]>();
 
         protected static void SimulateThinking()
         {
             Thread.Sleep(rnd.Next(50, 150));
         }
 
-        protected bool FindEmptyCorners(out List<byte[]> emptyCorners)
+        protected void FindEmptyWalls()
         {
-            var empty = emptyCells.FindAll(x => x[0] == x[1] && x[0] != 1);
-            emptyCorners = empty;
-            if (empty.Count > 0)
+            emptyWalls.Clear();
+            byte[,] walls = new byte[,] { { 0, 1 }, { 1, 0 }, { 1, 2 }, { 2, 1 } };
+            for (int i = 0; i < 4; i++)
+            {
+                if (Game.gameMap[walls[i,0],walls[i,1]] == 0)
+                {
+                    emptyWalls.Add(new byte[] { walls[i, 0], walls[i, 1] });
+                } 
+            }
+        }
+
+        protected bool FindEmptyCorners()
+        {
+            emptyCorners.Clear();
+            for (byte i = 0; i < 2; i++)
+            {
+                for (byte j = 0; j < 2; j++)
+                {
+                    if(Game.gameMap[i *2,j*2] == 0)
+                    {
+                        emptyCorners.Add(new byte[] { (byte)(i * 2), (byte)(j * 2) });
+                    }
+                }
+            }
+            if (emptyCorners.Count > 0)
             {
                 return true;
             }

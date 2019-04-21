@@ -21,6 +21,14 @@ namespace TicTacToe
                 move[0]--;
                 move[1]--;
             }
+            else if (moveString == "reset")
+            {
+                Game.PlayGame();
+            }
+            else if(moveString == "exit")
+            {
+                Environment.Exit(0);
+            }
             else
             {
                 Console.WriteLine("Wrong coordinates!");
