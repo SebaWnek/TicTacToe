@@ -79,7 +79,7 @@ namespace TicTacToe
             while (!player2Correct);
 
             //Decides if after every round game will start new round, or ask to be run again or terminated
-            Console.WriteLine("Do you want to continiue playing, or decide after every game? y/n");
+            Console.WriteLine("Do you want to continiue playing, or decide after every game? Or do you need help? y/n/help");
 
             do
             {
@@ -93,6 +93,14 @@ namespace TicTacToe
                 {
                     seamlessPlay = false;
                     seamlessCorrect = true;
+                }
+                else if (answer == "help")
+                {
+                    seamlessCorrect = false;
+                    Console.WriteLine("To play write coordinates, first column then row.For example type 21\n" +
+                        "To reset game type reset\n" +
+                        "To exit game type exit\n" +
+                        "AI vs AI game with continuos play cannot be terminated by command. Just exit application");
                 }
                 else
                 {
