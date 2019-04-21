@@ -2,12 +2,23 @@
 
 namespace TicTacToe
 {
+    /// <summary>
+    /// Class responsible for input and selecting next position when player is Human
+    /// </summary>
     public class Human : Player
     {
+        /// <summary>
+        /// Constructor for Human player
+        /// </summary>
+        /// <param name="name">Put on board when printing and in comments</param>
+        /// <param name="number">Used for calculations to distinguish from other player</param>
         public Human(string name, int number) : base(name, number)
         {
         }
-
+        /// <summary>
+        /// Method for getting input from human player and returning coordinates of next human move position
+        /// </summary>
+        /// <returns>Coordinates of next moves decided by Human player</returns>
         public override byte[] NextMove()
         {
             Console.WriteLine($"{Name} - Next Move?");
@@ -27,7 +38,7 @@ namespace TicTacToe
             }
             else if(moveString == "exit")
             {
-                Environment.Exit(0);
+                Game.EndGame();
             }
             else
             {

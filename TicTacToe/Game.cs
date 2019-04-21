@@ -4,8 +4,14 @@ using System.Threading;
 
 namespace TicTacToe
 {
+    /// <summary>
+    /// Static class responsible for keeping game info and playing game in general
+    /// </summary>
     public static class Game
     {
+        /// <summary>
+        /// Player types
+        /// </summary>
         public enum PlayerType
         {
             human,
@@ -13,13 +19,19 @@ namespace TicTacToe
             medium,
             hard
         };
-
+        ///
         public static Player player1;
         public static Player player2;
         public static int[,] gameMap;
         private static bool seamlessPlay;
         public static int GameCounter { get; set; } = 0;
-
+        /// <summary>
+        /// Creating new player based on selected player type
+        /// </summary>
+        /// <param name="type">Player type to create</param>
+        /// <param name="name">Put on board when printing and in comments</param>
+        /// <param name="number">Used for calculations to distinguish from other player</param>
+        /// <returns>New player object</returns>
         public static Player CreatePlayer(PlayerType type, string name, int number)
         {
             switch (type)
@@ -36,7 +48,9 @@ namespace TicTacToe
                     throw new Exception("Wrong player type");
             }
         }
-
+        /// <summary>
+        /// Method setting up and initializing new game
+        /// </summary>
         public static void InitializeGame()
         {
             PlayerType playerType1;
@@ -64,6 +78,7 @@ namespace TicTacToe
             }
             while (!player2Correct);
 
+            //Decides if after every round game will start new round, or ask to be run again or terminated
             Console.WriteLine("Do you want to continiue playing, or decide after every game? y/n");
 
             do
@@ -91,7 +106,9 @@ namespace TicTacToe
             player2 = CreatePlayer(playerType2, "O", 10);
             PlayGame();
         }
-
+        /// <summary>
+        /// Methid for printing game board to console
+        /// </summary>
         public static void PrintGame()
         {
             string textTmp;
@@ -110,7 +127,11 @@ namespace TicTacToe
                 if (i < 2) Console.WriteLine("  ---------");
             }
         }
-
+        /// <summary>
+        /// Decides which player moves next
+        /// </summary>
+        /// <param name="move">Move counter based on which next player is decided</param>
+        /// <returns>Next player</returns>
         private static Player SelectPlayer(int move)
         {
             if ((move + GameCounter) % 2 == 0)
@@ -122,7 +143,9 @@ namespace TicTacToe
                 return player2;
             }
         }
-
+        /// <summary>
+        /// Method responsible for performing whole round
+        /// </summary>
         public static void PlayGame()
         {
             gameMap = new int[3, 3];
@@ -165,14 +188,18 @@ namespace TicTacToe
                 PlayGame(); 
             }
         }
-
-        private static void EndGame()
+        /// <summary>
+        /// Ending game and exiting program if ordered to
+        /// </summary>
+        public static void EndGame()
         {
             Console.Clear();
             Console.WriteLine($"Thank you for playing!\nFinal score:\n{player1.Name}: {player1.Score}\n{player2.Name}: {player2.Score}");
             Environment.Exit(0);
         }
-
+        /// <summary>
+        /// Deciding what to do after round has finished
+        /// </summary>
         private static void NewGame()
         {
             Console.WriteLine("Do you want to play again? y/n/reset");
@@ -194,7 +221,11 @@ namespace TicTacToe
                     return;
             }
         }
-
+        /// <summary>
+        /// Calculating array of sums of rows/columns/diagonals that can be used to decide next move by AI 
+        /// and also to decide if player has won
+        /// </summary>
+        /// <returns>Array of sums of rows/columns/diagonals</returns>
         public static int[] MapSums()
         {
             //1,2,3 - horizontal, 4,5,6 - vertical, 7 - descending, 8 - ascending
@@ -219,7 +250,11 @@ namespace TicTacToe
 
             return mapSums;
         }
-
+        /// <summary>
+        /// Checking if player has won
+        /// </summary>
+        /// <param name="player">Player to check</param>
+        /// <returns>Information if player has won</returns>
         private static bool CheckIfWon(Player player)
         {
             int[] mapSums = MapSums();

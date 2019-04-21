@@ -3,14 +3,26 @@ using System.Linq;
 
 namespace TicTacToe
 {
+    /// <summary>
+    /// Class for AIMedium 
+    /// Intermediate between Easy and Hard.
+    /// This class is aware of potential win on both, itself and oponent side and takes action to win or to block opponent from wining, 
+    /// otherwise selects random position
+    /// </summary>
     public class AIMedium : AI
     {
         private int indexOfFound;
-
+        /// <summary>
+        /// Constructor for class AIMedium
+        /// </summary>
+        /// <param name="name">Put on board when printing and in comments</param>
+        /// <param name="number">Used for calculations to distinguish from other player</param>
         public AIMedium(string name, int number) : base(name, number)
         {
         }
-
+        /// <summary>
+        /// First part of AI, deciding about next move
+        /// </summary>
         private void FindIndexOfSumsArray()
         {
             int[] mapSums = Game.MapSums();
@@ -36,7 +48,10 @@ namespace TicTacToe
             }
 
         }
-
+        /// <summary>
+        /// Second part of AI executing next move based on FindIndexOfSumsArray decision 
+        /// </summary>
+        /// <returns>Coordinates of next moves decided by AI</returns>
         private byte[] NextFree()
         {
             switch (indexOfFound)
@@ -90,7 +105,10 @@ namespace TicTacToe
             return new byte[] { 3, 3 };
         }
 
-
+        /// <summary>
+        /// Inherited methos, calculates and sends to Game coordinates that AI decided
+        /// </summary>
+        /// <returns>Coordinates of next moves decided by AI</returns>
         public override byte[] NextMove()
         {
             FindEmptyCells();

@@ -6,16 +6,28 @@ using System.Threading.Tasks;
 
 namespace TicTacToe
 {
+    /// <summary>
+    /// Class responsible for hard AI
+    /// Coded based on http://www.cs.jhu.edu/~jorgev/cs106/ttt.pdf
+    /// Should never lose, only win or draw
+    /// </summary>
     public class AIHard : AI
     {
         private int indexOfFound;
         private int[] mapSums;
         private int EnemyNumericValue;
+        /// <summary>
+        /// Constructor for class AIHard
+        /// </summary>
+        /// <param name="name">Put on board when printing and in comments</param>
+        /// <param name="number">Used for calculations to distinguish from other player</param>
         public AIHard(string name, int number) : base(name, number)
         {
             EnemyNumericValue = NumericValue == 1 ? 10 : 1;
         }
-
+        /// <summary>
+        /// First part of AI, deciding about next move
+        /// </summary>
         private void FindIndexOfSumsArray()
         {
             mapSums = Game.MapSums();
@@ -67,7 +79,10 @@ namespace TicTacToe
             }
 
         }
-
+        /// <summary>
+        /// Second part of AI executing next move based on FindIndexOfSumsArray decision 
+        /// </summary>
+        /// <returns>Coordinates of next moves decided by AI</returns>
         private byte[] NextFree()
         {
             bool isThereFreeCorner;
@@ -136,14 +151,19 @@ namespace TicTacToe
             }
             return new byte[] { 3, 3 };
         }
-
+        /// <summary>
+        /// Helper method to decide fourth move, when AI started second and first move was in the middle
+        /// </summary>
+        /// <returns>Coordinates of next moves decided by AI</returns>
         private byte[] CheckNeighbours()
         {
             int sumTmp = 0;
+            //All enemy moves were on corners
             if (emptyWalls.Count() == 4)
             {
                 return emptyWalls[rnd.Next(emptyWalls.Count())];
             }
+            //One enemy move was in corner
             else if (emptyWalls.Count() == 3)
             {
                 for (int i = 0; i < 2; i++)
@@ -171,11 +191,13 @@ namespace TicTacToe
                     }
                 }
             }
+            //Both enemy moves were not in corners and were in same row or column
             else if (emptyWalls.Count() == 2 && mapSums[1] == EnemyNumericValue * 2 + NumericValue ||
                 mapSums[4] == EnemyNumericValue * 2 + NumericValue)
             {
                 return emptyWalls[rnd.Next(emptyWalls.Count())];
             }
+            //Both enemy moves were not in corners and are not in same row or column
             else
             {
                 for (byte i = 0; i < 2; i++)
@@ -191,15 +213,21 @@ namespace TicTacToe
                     }
                 }
             }
+            //Should never be invoked
+            Console.WriteLine("Something went wrong!");
             return new byte[] { 0, 0 };
         }
-
+        /// <summary>
+        /// Inherited methos, calculates and sends to Game coordinates that AI decided
+        /// </summary>
+        /// <returns>Coordinates of next moves decided by AI</returns>
         public override byte[] NextMove()
         {
             FindEmptyCells();
             SimulateThinking();
             FindIndexOfSumsArray();
             byte[] next = NextFree();
+            //Just to be sure it wont select already used position, will select new one, or loop
             if(Game.gameMap[next[0],next[1]] != 0)
             {
                 next = NextMove();
